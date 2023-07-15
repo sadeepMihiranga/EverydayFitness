@@ -1,0 +1,20 @@
+﻿{
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:7000"
+  },
+
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/apigateway/v1/workout",
+      "UpstreamHttpMethod": [ "GET", "PUT", "POST" ],
+      "DownstreamPathTemplate": "/api/workout",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7285
+        }
+      ]
+    }
+  ]
+}
