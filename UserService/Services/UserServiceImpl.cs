@@ -45,6 +45,47 @@ namespace UserService.Services
             return EntityToDTO(user);
         }
 
+        public async Task<UserDTO> RegisterUser(UserDTO userDTO)
+        {
+            if (userDTO.Username == null || userDTO.Username.Equals(""))
+            {
+                throw new InvalidDataException("Username is required");
+            }
+
+            if (userDTO.Password == null || userDTO.Password.Equals(""))
+            {
+                throw new InvalidDataException("Password is required");
+            }
+
+            User user = await _userDbContext.Users
+               .Where(u => u.Username.Equals(userDTO.Username))
+               .Where(u => u.Status == CommonStatusEnum.ACTIVE)
+               .FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                throw new InvalidDataException("Username is already taken");
+            }
+
+            User newUser = DTOToEntity(userDTO);
+            newUser.Status = CommonStatusEnum.ACTIVE;
+
+            _userDbContext.Users.Add(newUser);
+            await _userDbContext.SaveChangesAsync();
+
+            return EntityToDTO(newUser);
+        }
+
+        public async Task<UserDTO> GetUserById(long id)
+        {
+            User user = await _userDbContext.Users
+                .Where(u => u.Id.Equals(id))
+                .Where(u => u.Status == CommonStatusEnum.ACTIVE)
+                .FirstOrDefaultAsync();
+
+            return EntityToDTO(user);
+        }
+
         private static string GetSha256Hashed(string input)
         {
             var inputBytes = Encoding.UTF8.GetBytes(input);
@@ -67,6 +108,22 @@ namespace UserService.Services
                 Email = user.Email,
                 Address = user.Address,
                 Status = user.Status
+            };
+        }
+
+        private static User DTOToEntity(UserDTO userDTO)
+        {
+            return new User()
+            {
+                Username = userDTO.Username,
+                Password = GetSha256Hashed(userDTO.Password),
+                FirstName = userDTO.FirstName,
+                FullName = userDTO.FullName,
+                DateOfBirth = userDTO.DateOfBirth,
+                Gender = userDTO.Gender,
+                MobileNumber = userDTO.MobileNumber,
+                Email = userDTO.Email,
+                Address = userDTO.Address,
             };
         }
     }

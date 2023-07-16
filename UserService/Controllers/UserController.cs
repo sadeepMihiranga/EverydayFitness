@@ -16,6 +16,12 @@ namespace UserService.Controllers
             _userService = userService;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> RegisterUser(UserDTO userDTO)
+        {
+            return Ok(new Response<UserDTO>(await _userService.RegisterUser(userDTO)));
+        }
+
         [Route("login")]
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestDTO loginRequestDTO)
