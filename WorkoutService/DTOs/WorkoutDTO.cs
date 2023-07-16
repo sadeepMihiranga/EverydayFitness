@@ -12,7 +12,7 @@
         public int Sets { get; set; }
         public bool IsRecurring { get; set; }
         public string RecurringType { get; set; }
-        public string RecurrsionDate { get; set; }
+        public string? RecurrsionDate { get; set; }
         public string Comment { get; set; }
         public int User { get; set; }
     }

@@ -1,0 +1,62 @@
+﻿using FitnessTracker.Enums;
+using Microsoft.EntityFrameworkCore;
+using WorkoutService.DTOs;
+using WorkoutService.Model;
+using WorkoutService.Repositories;
+
+namespace WorkoutService.Services
+{
+    public class WorkoutTypeServiceImpl : IWorkoutTypeService
+    {
+        private readonly WorkoutContext _workoutDbContext;
+
+        public WorkoutTypeServiceImpl(WorkoutContext workoutContext)
+        {
+            _workoutDbContext = workoutContext;
+        }
+
+        public async Task<IEnumerable<WorkoutTypeDTO>> GetAllWorkoutTypes()
+        {
+
+            if (_workoutDbContext.WorkoutTypes == null)
+            {
+                return Enumerable.Empty<WorkoutTypeDTO>();
+            }
+
+            List<WorkoutType> workoutTypes = await _workoutDbContext.WorkoutTypes
+                .Where(w => w.Status == CommonStatusEnum.ACTIVE).ToListAsync();
+
+            List<WorkoutTypeDTO> workoutTypeDTOList = workoutTypes.Select(i => EntityToWorkoutTypeDTO(i)).ToList();
+
+            return workoutTypeDTOList;
+        }
+
+        public async Task<WorkoutTypeDTO> GetWorkoutTypeById(int id)
+        {
+            WorkoutType workoutType = await _workoutDbContext.WorkoutTypes
+                .Where(w => w.Id == id)
+                .Where(w => w.Status == CommonStatusEnum.ACTIVE)
+                .FirstOrDefaultAsync();
+
+            if (workoutType == null)
+            {
+                throw new InvalidDataException("Workout type id is invalid");
+            }
+
+            return EntityToWorkoutTypeDTO(workoutType);
+        }
+
+        public static WorkoutTypeDTO EntityToWorkoutTypeDTO(WorkoutType workoutType)
+        {
+            if (workoutType == null)
+                return null;
+
+            return new WorkoutTypeDTO()
+            {
+                Id = workoutType.Id,
+                Name = workoutType.Name,
+                Status = workoutType.Status
+            };
+        }
+    }
+}

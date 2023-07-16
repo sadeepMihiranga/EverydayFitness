@@ -6,6 +6,8 @@ using WorkoutService.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+// Database connection string
 builder.Services.AddDbContext<WorkoutContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("EverydayFitnessCS")));
 
@@ -22,6 +24,7 @@ builder.Services.AddSwaggerGen();
 
 // Interfaces and service implementations
 builder.Services.AddScoped<IWorkoutService, WorkoutServiceImpl>();
+builder.Services.AddScoped<IWorkoutTypeService, WorkoutTypeServiceImpl>();
 
 var app = builder.Build();
 
@@ -30,6 +33,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.UseExceptionHandler("/error-development");
+}
+else
+{
+    app.UseExceptionHandler("/error");
 }
 
 app.UseHttpsRedirection();
