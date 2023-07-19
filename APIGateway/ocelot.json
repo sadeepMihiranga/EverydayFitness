@@ -53,6 +53,19 @@
           "Port": 7002
         }
       ]
+    },
+    // meal service
+    {
+      "UpstreamPathTemplate": "/apigateway/v1/cheat-meal-type/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "POST", "DELETE" ],
+      "DownstreamPathTemplate": "/api/cheat-meal-type/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7003
+        }
+      ]
     }
   ]
 }
