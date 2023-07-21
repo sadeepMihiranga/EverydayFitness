@@ -30,7 +30,8 @@ builder.Services.AddScoped<ICheatMealService, CheatMealServiceImpl>();
 
 builder.Services.AddHttpClient("UserService", c =>
 {
-    c.BaseAddress = new Uri("https://localhost:7000/apigateway/v1");
+    //c.BaseAddress = new Uri("https://localhost:7000/apigateway/v1");
+    c.BaseAddress = new Uri("https://everydayfitness-userservice.azurewebsites.net/api");
 });
 
 var app = builder.Build();

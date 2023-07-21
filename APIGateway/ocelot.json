@@ -1,6 +1,7 @@
 ﻿{
   "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:7000"
+    //"BaseUrl": "https://localhost:7000",
+    "BaseUrl": "https://everydayfitnessapi.azurewebsites.net/"
   },
 
   "Routes": [
@@ -12,8 +13,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7001
+          "Host": "everudayfitness-workoutservice.azurewebsites.net"
         }
       ]
     },
@@ -24,8 +24,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7001
+          "Host": "everudayfitness-workoutservice.azurewebsites.net"
         }
       ]
     },
@@ -36,8 +35,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7001
+          "Host": "everudayfitness-workoutservice.azurewebsites.net"
         }
       ]
     },
@@ -49,8 +47,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7002
+          "Host": "everydayfitness-userservice.azurewebsites.net"
         }
       ]
     },
@@ -61,8 +58,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7002
+          "Host": "everydayfitness-userservice.azurewebsites.net"
         }
       ]
     },
@@ -74,8 +70,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7003
+          "Host": "everydayfitness-mealservice.azurewebsites.net"
         }
       ]
     },
@@ -86,8 +81,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7003
+          "Host": "everydayfitness-mealservice.azurewebsites.net"
         }
       ]
     },
@@ -98,8 +92,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7003
+          "Host": "everydayfitness-mealservice.azurewebsites.net"
         }
       ]
     },
@@ -110,8 +103,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7003
+          "Host": "everydayfitness-mealservice.azurewebsites.net"
         }
       ]
     },
@@ -122,8 +114,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7003
+          "Host": "everydayfitness-mealservice.azurewebsites.net"
         }
       ]
     }
