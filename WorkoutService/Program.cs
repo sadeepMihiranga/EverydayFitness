@@ -26,6 +26,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IWorkoutService, WorkoutServiceImpl>();
 builder.Services.AddScoped<IWorkoutTypeService, WorkoutTypeServiceImpl>();
 
+builder.Services.AddHttpClient("UserService", c =>
+{
+    c.BaseAddress = new Uri("https://localhost:7000/apigateway/v1");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

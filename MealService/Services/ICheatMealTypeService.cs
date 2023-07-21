@@ -1,4 +1,5 @@
 ﻿using MealService.DTOs;
+using MealService.Models;
 
 namespace MealService.Services
 {
@@ -6,6 +7,10 @@ namespace MealService.Services
     {
         Task<IEnumerable<CheatMealTypeDTO>> GetAllCheatMealTypes();
 
-        Task<CheatMealTypeDTO> GetCheatMealTypeById(int id);
+        Task<CheatMealTypeDTO> GetCheatMealTypeById(long id);
+
+        Task<CheatMealType> ValidateCheatMealType(long id);
+
+        CheatMealTypeDTO EntityToDTO(CheatMealType cheatMealType);
     }
 }

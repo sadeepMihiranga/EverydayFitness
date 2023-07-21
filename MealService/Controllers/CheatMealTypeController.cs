@@ -24,7 +24,7 @@ namespace MealService.Controllers
 
         [Route("{id}")]
         [HttpGet]
-        public async Task<IActionResult> GeById(int id)
+        public async Task<IActionResult> GeById(long id)
         {
             return Ok(new Response<CheatMealTypeDTO>(await _cheatMealTypeService.GetCheatMealTypeById(id)));
         }

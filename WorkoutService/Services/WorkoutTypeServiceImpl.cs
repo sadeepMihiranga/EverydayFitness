@@ -26,12 +26,10 @@ namespace WorkoutService.Services
             List<WorkoutType> workoutTypes = await _workoutDbContext.WorkoutTypes
                 .Where(w => w.Status == CommonStatusEnum.ACTIVE).ToListAsync();
 
-            List<WorkoutTypeDTO> workoutTypeDTOList = workoutTypes.Select(i => EntityToWorkoutTypeDTO(i)).ToList();
-
-            return workoutTypeDTOList;
+            return workoutTypes.Select(i => EntityToDTO(i)).ToList();
         }
 
-        public async Task<WorkoutTypeDTO> GetWorkoutTypeById(int id)
+        public async Task<WorkoutType> ValidateWorkoutType(long id)
         {
             WorkoutType workoutType = await _workoutDbContext.WorkoutTypes
                 .Where(w => w.Id == id)
@@ -43,10 +41,15 @@ namespace WorkoutService.Services
                 throw new InvalidDataException("Workout type id is invalid");
             }
 
-            return EntityToWorkoutTypeDTO(workoutType);
+            return workoutType;
         }
 
-        public static WorkoutTypeDTO EntityToWorkoutTypeDTO(WorkoutType workoutType)
+        public async Task<WorkoutTypeDTO> GetWorkoutTypeById(long id)
+        {
+            return EntityToDTO(ValidateWorkoutType(id).Result);
+        }
+
+        public WorkoutTypeDTO EntityToDTO(WorkoutType workoutType)
         {
             if (workoutType == null)
                 return null;

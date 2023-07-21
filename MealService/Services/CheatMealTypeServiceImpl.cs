@@ -25,12 +25,15 @@ namespace MealService.Services
             List<CheatMealType> cheatMealTypes = await _mealDbContext.CheatMealTypes
                 .Where(w => w.Status == CommonStatusEnum.ACTIVE).ToListAsync();
 
-            List<CheatMealTypeDTO> cheatMealTypeDTOList = cheatMealTypes.Select(i => EntityToDTO(i)).ToList();
-
-            return cheatMealTypeDTOList;
+            return cheatMealTypes.Select(i => EntityToDTO(i)).ToList();
         }
 
-        public async Task<CheatMealTypeDTO> GetCheatMealTypeById(int id)
+        public async Task<CheatMealTypeDTO> GetCheatMealTypeById(long id)
+        {
+            return EntityToDTO(ValidateCheatMealType(id).Result);
+        }
+
+        public async Task<CheatMealType> ValidateCheatMealType(long id)
         {
             CheatMealType cheatMealType = await _mealDbContext.CheatMealTypes
                 .Where(w => w.Id == id)
@@ -42,10 +45,10 @@ namespace MealService.Services
                 throw new InvalidDataException("Cheat meal type id is invalid");
             }
 
-            return EntityToDTO(cheatMealType);
+            return cheatMealType;
         }
 
-        public static CheatMealTypeDTO EntityToDTO(CheatMealType cheatMealType)
+        public CheatMealTypeDTO EntityToDTO(CheatMealType cheatMealType)
         {
             if (cheatMealType == null)
                 return null;

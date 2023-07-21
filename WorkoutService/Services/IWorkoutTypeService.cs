@@ -1,4 +1,5 @@
 ﻿using WorkoutService.DTOs;
+using WorkoutService.Model;
 
 namespace WorkoutService.Services
 {
@@ -6,6 +7,10 @@ namespace WorkoutService.Services
     {
         Task<IEnumerable<WorkoutTypeDTO>> GetAllWorkoutTypes();
 
-        Task<WorkoutTypeDTO> GetWorkoutTypeById(int id);
+        Task<WorkoutType> ValidateWorkoutType(long id);
+
+        Task<WorkoutTypeDTO> GetWorkoutTypeById(long id);
+
+        WorkoutTypeDTO EntityToDTO(WorkoutType workoutType);
     }
 }

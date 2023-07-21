@@ -25,6 +25,13 @@ builder.Services.AddSwaggerGen();
 
 // Interfaces and service implementations
 builder.Services.AddScoped<ICheatMealTypeService, CheatMealTypeServiceImpl>();
+builder.Services.AddScoped<ICheatMealReasonService, CheatMealReasonServiceImpl>();
+builder.Services.AddScoped<ICheatMealService, CheatMealServiceImpl>();
+
+builder.Services.AddHttpClient("UserService", c =>
+{
+    c.BaseAddress = new Uri("https://localhost:7000/apigateway/v1");
+});
 
 var app = builder.Build();
 

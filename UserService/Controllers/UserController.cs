@@ -28,5 +28,12 @@ namespace UserService.Controllers
         {
             return Ok(new Response<UserDTO>(await _userService.Login(loginRequestDTO)));
         }
+
+        [Route("{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetUserById(long id)
+        {
+            return Ok(new Response<UserDTO>(await _userService.GetUserById(id)));
+        }
     }
 }

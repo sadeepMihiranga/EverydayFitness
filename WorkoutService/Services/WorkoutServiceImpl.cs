@@ -1,6 +1,7 @@
 ﻿using FitnessTracker.Enums;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using WorkoutService.DTOs;
 using WorkoutService.Model;
 using WorkoutService.Repositories;
@@ -10,13 +11,17 @@ namespace WorkoutService.Services
     public class WorkoutServiceImpl : IWorkoutService
     {
         private readonly WorkoutContext _workoutDbContext;
+        private readonly IWorkoutTypeService _workoutTypeService;
+        private readonly IHttpClientFactory _clientFactory;
 
-        public WorkoutServiceImpl(WorkoutContext workoutContext)
+        public WorkoutServiceImpl(WorkoutContext workoutContext, IWorkoutTypeService workoutTypeService, IHttpClientFactory clientFactory)
         {
             _workoutDbContext = workoutContext;
+            _workoutTypeService = workoutTypeService;
+            _clientFactory = clientFactory;
         }
 
-        public async Task<IEnumerable<WorkoutDTO>> GetAllWorkouts(int userId)
+        public async Task<IEnumerable<WorkoutDTO>> GetAllWorkouts(long userId)
         {
             if (_workoutDbContext.Workouts == null)
             {
@@ -28,17 +33,54 @@ namespace WorkoutService.Services
                 throw new InvalidDataException("User id is invalid");
             }
 
+            UserDTO user = ValidateUser(userId).Result;
+
+            if (user == null)
+            {
+                throw new InvalidDataException("User id is invalid");
+            }
+
             List<Workout> workoutList = await _workoutDbContext.Workouts
                 .Where(w => w.User == userId)
                 .Where(w => w.Status == CommonStatusEnum.ACTIVE)
                 .Include(w => w.Type).ToListAsync();
 
-            List<WorkoutDTO> workoutDTOs = workoutList.Select(i => EntityToWorkoutDTO(i)).ToList();
-
-            return workoutDTOs;
+            return workoutList.Select(i => EntityToDTO(i)).ToList();
         }
 
-        public async Task<WorkoutDTO> GetWorkoutById(int userId, int id)
+        private async Task<UserDTO> ValidateUser(long userId) 
+        {
+            // create http client
+            HttpClient client = _clientFactory.CreateClient("UserService");
+
+            HttpResponseMessage response = await client.GetAsync(client.BaseAddress.ToString() + "/user/" + userId);
+
+            client.Dispose();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true // this is the point
+                };
+                options.Converters.Add(new JsonStringEnumConverter());
+
+                // read response as string
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                // access the root element and extract the specific node from the JSON using the provided path
+                JsonElement specificNode = JsonDocument.Parse(responseContent).RootElement.GetProperty("data");
+
+                // deserialize the JSON string to the DTO
+                return JsonSerializer.Deserialize<UserDTO>(specificNode.GetRawText(), options);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<WorkoutDTO> GetWorkoutById(long userId, long id)
         {
             Workout workout = await _workoutDbContext.Workouts
                 .Where(w => w.User == userId)
@@ -51,33 +93,29 @@ namespace WorkoutService.Services
                 throw new InvalidDataException("Workout id is invalid");
             }
 
-            return EntityToWorkoutDTO(workout);
+            return EntityToDTO(workout);
         }
 
         public async Task<WorkoutDTO> LogWorkout(WorkoutDTO workoutDTO)
         {
-
-            WorkoutType workoutType = _workoutDbContext.WorkoutTypes
-                .Where(wt => wt.Id == workoutDTO.Type.Id)
-                .Where(wt => wt.Status == CommonStatusEnum.ACTIVE)
-                .FirstOrDefault();
+            WorkoutType workoutType = _workoutTypeService.ValidateWorkoutType(workoutDTO.Type.Id).Result;
 
             if (workoutType == null)
             {
                 throw new InvalidDataException("Workout type id is invalid");
             }
 
-            Workout workout = DTOToWorkout(workoutDTO);
+            Workout workout = DTOToEntity(workoutDTO);
             workout.Type = workoutType;
             workout.Status = CommonStatusEnum.ACTIVE;
 
             _workoutDbContext.Workouts.Add(workout);
             await _workoutDbContext.SaveChangesAsync();
 
-            return EntityToWorkoutDTO(workout);
+            return EntityToDTO(workout);
         }
 
-        public async Task<IEnumerable<WorkoutDTO>> SearchWorkouts(int userId, string workoutType, int page, int size)
+        public async Task<IEnumerable<WorkoutDTO>> SearchWorkouts(long userId, string workoutType, int page, int size)
         {
             List<Workout> workoutList = await _workoutDbContext.Workouts
                 .Where(w => workoutType == null || (workoutType != null && w.Type.Name.StartsWith(workoutType)))
@@ -93,17 +131,24 @@ namespace WorkoutService.Services
                 return Enumerable.Empty<WorkoutDTO>();
             }
 
-            List<WorkoutDTO> workoutDTOs = workoutList.Select(i => EntityToWorkoutDTO(i)).ToList();
-
-            return workoutDTOs;
+            return workoutList.Select(i => EntityToDTO(i)).ToList();
         }
 
-        public async Task<IEnumerable<WorkoutDTO>> SearchForReport(int userId, string fromDate, string toDate)
+        public async Task<IEnumerable<WorkoutDTO>> SearchForReport(long userId, string fromDate, string toDate)
         {
+            if (String.IsNullOrEmpty(fromDate))
+            {
+                throw new InvalidDataException("From date is required");
+            }
+
+            if (String.IsNullOrEmpty(toDate))
+            {
+                throw new InvalidDataException("To date is required");
+            }
 
             List<Workout> workoutList = await _workoutDbContext.Workouts
                 .Where(w => w.Date >= Convert.ToDateTime(fromDate))
-                .Where(w => w.Date < Convert.ToDateTime(toDate))
+                .Where(w => w.Date < Convert.ToDateTime(toDate + " 23:59:59"))
                 .Where(w => w.Status == CommonStatusEnum.ACTIVE)
                 .Include(w => w.Type)
                 .ToListAsync();
@@ -113,12 +158,10 @@ namespace WorkoutService.Services
                 return Enumerable.Empty<WorkoutDTO>();
             }
 
-            List<WorkoutDTO> workoutDTOs = workoutList.Select(i => EntityToWorkoutDTO(i)).ToList();
-
-            return workoutDTOs;
+            return workoutList.Select(i => EntityToDTO(i)).ToList();
         }
 
-        public void RemoveWorkout(int userId, int id)
+        public void RemoveWorkout(long userId, long id)
         {
             Workout workout = _workoutDbContext.Workouts
                 .Where(w => w.User == userId)
@@ -138,7 +181,7 @@ namespace WorkoutService.Services
             _workoutDbContext.SaveChangesAsync();
         }
 
-        private static Workout DTOToWorkout(WorkoutDTO workoutDTO)
+        private static Workout DTOToEntity(WorkoutDTO workoutDTO)
         {
             return new Workout()
             {
@@ -158,12 +201,15 @@ namespace WorkoutService.Services
             };
         }
 
-        private static WorkoutDTO EntityToWorkoutDTO(Workout workout)
+        private WorkoutDTO EntityToDTO(Workout workout)
         {
+            if (workout == null)
+                return null;
+
             return new WorkoutDTO()
             {
                 Id = workout.Id,
-                Type = WorkoutTypeServiceImpl.EntityToWorkoutTypeDTO(workout.Type),
+                Type = _workoutTypeService.EntityToDTO(workout.Type),
                 Name = workout.Name,
                 Date = workout.Date,
                 StartTime = workout.StartTime,

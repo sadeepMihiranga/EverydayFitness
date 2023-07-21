@@ -19,8 +19,20 @@
     },
     {
       "UpstreamPathTemplate": "/apigateway/v1/workout-type/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "POST", "DELETE" ],
+      "UpstreamHttpMethod": [ "GET" ],
       "DownstreamPathTemplate": "/api/workout-type/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/apigateway/v1/workout-type",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/workout-type",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -43,9 +55,9 @@
       ]
     },
     {
-      "UpstreamPathTemplate": "/apigateway/v1/user",
+      "UpstreamPathTemplate": "/apigateway/v1/user/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "POST", "DELETE" ],
-      "DownstreamPathTemplate": "/api/user",
+      "DownstreamPathTemplate": "/api/user/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -57,8 +69,56 @@
     // meal service
     {
       "UpstreamPathTemplate": "/apigateway/v1/cheat-meal-type/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "POST", "DELETE" ],
+      "UpstreamHttpMethod": [ "GET" ],
       "DownstreamPathTemplate": "/api/cheat-meal-type/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7003
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/apigateway/v1/cheat-meal-type",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/cheat-meal-type/",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7003
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/apigateway/v1/cheat-meal-reason/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/cheat-meal-reason/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7003
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/apigateway/v1/cheat-meal-reason",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/cheat-meal-reason",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7003
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/apigateway/v1/cheat-meal/users/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "POST", "DELETE" ],
+      "DownstreamPathTemplate": "/api/cheat-meal/users/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {

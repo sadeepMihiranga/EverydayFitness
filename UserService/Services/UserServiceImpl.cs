@@ -83,6 +83,11 @@ namespace UserService.Services
                 .Where(u => u.Status == CommonStatusEnum.ACTIVE)
                 .FirstOrDefaultAsync();
 
+            if (user == null) 
+            {
+                throw new InvalidDataException("User id is invalid");
+            }
+
             return EntityToDTO(user);
         }
 

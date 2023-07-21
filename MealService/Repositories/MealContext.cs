@@ -13,6 +13,8 @@ namespace MealService.Repositories
         }
 
         public DbSet<CheatMealType> CheatMealTypes { get; set; }
+        public DbSet<CheatMealReason> CheatMealReasons { get; set; }
+        public DbSet<CheatMeal> CheatMeals { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,6 +22,26 @@ namespace MealService.Repositories
                 .Entity<CheatMealType>()
                 .Property(d => d.Status)
                 .HasConversion(new EnumToStringConverter<CommonStatusEnum>());
+
+            modelBuilder
+               .Entity<CheatMealReason>()
+               .Property(d => d.Status)
+               .HasConversion(new EnumToStringConverter<CommonStatusEnum>());
+
+            modelBuilder
+              .Entity<CheatMeal>()
+              .Property(d => d.MealPortionSize)
+              .HasConversion(new EnumToStringConverter<MealPortionSizeEnum>());
+
+            modelBuilder
+              .Entity<CheatMeal>()
+              .Property(d => d.CheatMealSatisfcation)
+              .HasConversion(new EnumToStringConverter<CheatMealSatisfcationEnum>());
+
+            modelBuilder
+              .Entity<CheatMeal>()
+              .Property(d => d.Status)
+              .HasConversion(new EnumToStringConverter<CommonStatusEnum>());
         }
     }
 }

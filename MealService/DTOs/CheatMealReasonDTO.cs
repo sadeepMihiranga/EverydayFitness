@@ -1,6 +1,6 @@
 ﻿namespace MealService.DTOs
 {
-    public class CheatMealTypeDTO : BaseDTO
+    public class CheatMealReasonDTO : BaseDTO
     {
         public string? Name { get; set; }
     }
