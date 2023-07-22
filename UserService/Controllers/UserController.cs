@@ -17,8 +17,10 @@ namespace UserService.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterUser(UserDTO userDTO)
+        [Consumes("application/xml")]
+        public async Task<IActionResult> RegisterUser([FromBody] UserDTO userDTO)
         {
+            //return Ok(await _userService.RegisterUser(userDTO));
             return Ok(new Response<UserDTO>(await _userService.RegisterUser(userDTO)));
         }
 

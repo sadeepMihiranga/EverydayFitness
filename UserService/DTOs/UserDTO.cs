@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.Enums;
+using System.Xml.Serialization;
 
 namespace UserService.DTOs
 {

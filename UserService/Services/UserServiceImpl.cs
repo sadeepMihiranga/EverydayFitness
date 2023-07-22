@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
+using System.Xml.Serialization;
 using UserService.DTOs;
 using UserService.Models;
 using UserService.Repositories;
@@ -130,6 +131,21 @@ namespace UserService.Services
                 Email = userDTO.Email,
                 Address = userDTO.Address,
             };
+        }
+
+        private static string Serialize<T>(T dataToSerialize)
+        {
+            try
+            {
+                var stringwriter = new System.IO.StringWriter();
+                var serializer = new XmlSerializer(typeof(T));
+                serializer.Serialize(stringwriter, dataToSerialize);
+                return stringwriter.ToString();
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }
