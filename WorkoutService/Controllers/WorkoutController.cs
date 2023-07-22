@@ -32,7 +32,7 @@ namespace WorkoutService.Controllers
 
         [Route("users/{userId}/search")]
         [HttpGet]
-        public async Task<IActionResult> SearchWorkouts(long userId, string type, int page, int size)
+        public async Task<IActionResult> SearchWorkouts(long userId, string? type, int page, int size)
         {
             return Ok(new Response<IEnumerable<WorkoutDTO>>(await _workoutService.SearchWorkouts(userId, type, page, size)));
         }
@@ -60,9 +60,9 @@ namespace WorkoutService.Controllers
 
         [Route("users/{userId}")]
         [HttpPost]
-        public async Task<IActionResult> LogWorkout(WorkoutDTO workoutDTO)
+        public async Task<IActionResult> LogWorkout(long userId, WorkoutDTO workoutDTO)
         {
-            return Ok(new Response<WorkoutDTO>(await _workoutService.LogWorkout(workoutDTO)));
+            return Ok(new Response<WorkoutDTO>(await _workoutService.LogWorkout(userId, workoutDTO)));
         }
     }
 }

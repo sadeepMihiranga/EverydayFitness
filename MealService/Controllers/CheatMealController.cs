@@ -25,7 +25,7 @@ namespace MealService.Controllers
 
         [Route("users/{userId}/search")]
         [HttpGet]
-        public async Task<IActionResult> SearchCheatMeals(long userId, string type, int page, int size)
+        public async Task<IActionResult> SearchCheatMeals(long userId, string? type, int page, int size)
         {
             return Ok(new Response<IEnumerable<CheatMealDTO>>(await _cheatMealService.SearchCheatMeals(userId, type, page, size)));
         }

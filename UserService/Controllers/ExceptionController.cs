@@ -24,6 +24,15 @@ namespace UserService.Controllers
         }
 
         [Route("/error")]
-        public IActionResult Error() => Problem();
+        public IActionResult ErrorProduction([FromServices] IWebHostEnvironment webHostEnvironment)
+        {
+            var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
+
+            return Problem(
+                //detail: context.Error.StackTrace,
+                title: context.Error.Message,
+                type: "",
+                detail: null);
+        }
     }
 }

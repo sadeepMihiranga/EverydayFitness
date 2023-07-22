@@ -8,7 +8,7 @@ namespace WorkoutService.Services
 
         Task<WorkoutDTO> GetWorkoutById(long userId, long id);
 
-        Task<WorkoutDTO> LogWorkout(WorkoutDTO workoutDTO);
+        Task<WorkoutDTO> LogWorkout(long userId, WorkoutDTO workoutDTO);
 
         Task<IEnumerable<WorkoutDTO>> SearchWorkouts(long userId, string workoutType, int page, int size);
 

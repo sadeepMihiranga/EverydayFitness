@@ -17,7 +17,6 @@ namespace WorkoutService.Services
 
         public async Task<IEnumerable<WorkoutTypeDTO>> GetAllWorkoutTypes()
         {
-
             if (_workoutDbContext.WorkoutTypes == null)
             {
                 return Enumerable.Empty<WorkoutTypeDTO>();

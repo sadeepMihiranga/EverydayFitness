@@ -96,7 +96,7 @@ namespace WorkoutService.Services
             return EntityToDTO(workout);
         }
 
-        public async Task<WorkoutDTO> LogWorkout(WorkoutDTO workoutDTO)
+        public async Task<WorkoutDTO> LogWorkout(long userId, WorkoutDTO workoutDTO)
         {
             WorkoutType workoutType = _workoutTypeService.ValidateWorkoutType(workoutDTO.Type.Id).Result;
 
@@ -105,7 +105,7 @@ namespace WorkoutService.Services
                 throw new InvalidDataException("Workout type id is invalid");
             }
 
-            Workout workout = DTOToEntity(workoutDTO);
+            Workout workout = DTOToEntity(userId, workoutDTO);
             workout.Type = workoutType;
             workout.Status = CommonStatusEnum.ACTIVE;
 
@@ -181,7 +181,7 @@ namespace WorkoutService.Services
             _workoutDbContext.SaveChangesAsync();
         }
 
-        private static Workout DTOToEntity(WorkoutDTO workoutDTO)
+        private static Workout DTOToEntity(long userId, WorkoutDTO workoutDTO)
         {
             return new Workout()
             {
@@ -197,7 +197,7 @@ namespace WorkoutService.Services
                 RecurrsionDate = workoutDTO.RecurrsionDate,
                 Comment = workoutDTO.Comment,
                 Status = workoutDTO.Status,
-                User = workoutDTO.User,
+                User = Convert.ToInt32(userId),
             };
         }
 
@@ -222,7 +222,7 @@ namespace WorkoutService.Services
                 RecurrsionDate = workout.RecurrsionDate,
                 Comment = workout.Comment,
                 Status = workout.Status,
-                User = workout.User,
+                User = ValidateUser(workout.User).Result,
             };
         }
     }
