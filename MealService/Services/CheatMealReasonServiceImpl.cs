@@ -18,9 +18,7 @@ namespace MealService.Services
         public async Task<IEnumerable<CheatMealReasonDTO>> GetAllCheatMealReasons()
         {
             if (_mealDbContext.CheatMealReasons == null)
-            {
                 return Enumerable.Empty<CheatMealReasonDTO>();
-            }
 
             List<CheatMealReason> cheatMealReasons = await _mealDbContext.CheatMealReasons
                 .Where(w => w.Status == CommonStatusEnum.ACTIVE).ToListAsync();
@@ -41,9 +39,7 @@ namespace MealService.Services
                 .FirstOrDefaultAsync();
 
             if (cheatMealReason == null)
-            {
                 throw new InvalidDataException("Cheat meal reason id is invalid");
-            }
 
             return cheatMealReason;
         }

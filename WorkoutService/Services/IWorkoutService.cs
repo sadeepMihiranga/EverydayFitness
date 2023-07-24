@@ -10,6 +10,8 @@ namespace WorkoutService.Services
 
         Task<WorkoutDTO> LogWorkout(long userId, WorkoutDTO workoutDTO);
 
+        Task<WorkoutDTO> UpdateWorkout(long userId, long id, WorkoutDTO workoutDTO);
+
         Task<IEnumerable<WorkoutDTO>> SearchWorkouts(long userId, string workoutType, int page, int size);
 
         Task<IEnumerable<WorkoutDTO>> SearchForReport(long userId, string fromDate, string toDate);

@@ -16,13 +16,6 @@ namespace WorkoutService.Controllers
             _workoutService = workoutService;
         }
 
-        /*[Route("users/{userId}")]
-        [HttpGet]
-        public async Task<IEnumerable<WorkoutDTO>> GetAll(int userId)
-        {
-            return await _workoutService.GetAllWorkouts(userId);
-        }*/
-
         [Route("users/{userId}")]
         [HttpGet]
         public async Task<IActionResult> GetAll(long userId)
@@ -63,6 +56,13 @@ namespace WorkoutService.Controllers
         public async Task<IActionResult> LogWorkout(long userId, WorkoutDTO workoutDTO)
         {
             return Ok(new Response<WorkoutDTO>(await _workoutService.LogWorkout(userId, workoutDTO)));
+        }
+
+        [Route("users/{userId}/workouts/{id}")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateWorkout(long userId, long id, WorkoutDTO workoutDTO)
+        {
+            return Ok(new Response<WorkoutDTO>(await _workoutService.UpdateWorkout(userId, id, workoutDTO)));
         }
     }
 }

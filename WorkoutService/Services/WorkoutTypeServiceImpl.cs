@@ -18,9 +18,7 @@ namespace WorkoutService.Services
         public async Task<IEnumerable<WorkoutTypeDTO>> GetAllWorkoutTypes()
         {
             if (_workoutDbContext.WorkoutTypes == null)
-            {
                 return Enumerable.Empty<WorkoutTypeDTO>();
-            }
 
             List<WorkoutType> workoutTypes = await _workoutDbContext.WorkoutTypes
                 .Where(w => w.Status == CommonStatusEnum.ACTIVE).ToListAsync();
@@ -36,9 +34,7 @@ namespace WorkoutService.Services
                 .FirstOrDefaultAsync();
 
             if (workoutType == null)
-            {
                 throw new InvalidDataException("Workout type id is invalid");
-            }
 
             return workoutType;
         }

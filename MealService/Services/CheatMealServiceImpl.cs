@@ -29,14 +29,10 @@ namespace MealService.Services
         public async Task<IEnumerable<CheatMealDTO>> GetAllCheatMeals(long userId)
         {
             if (_mealDbContext.CheatMeals == null)
-            {
                 return Enumerable.Empty<CheatMealDTO>();
-            }
 
             if (userId < 1)
-            {
                 throw new InvalidDataException("User id is invalid");
-            }
 
             List<CheatMeal> cheatMealList = await _mealDbContext.CheatMeals
                 .Where(c => c.User == userId)
@@ -91,9 +87,7 @@ namespace MealService.Services
                  .ToListAsync();
 
             if (cheatMealList == null || !cheatMealList.Any())
-            {
                 return Enumerable.Empty<CheatMealDTO>();
-            }
 
             return cheatMealList.Select(i => EntityToDTO(i)).ToList();
         }
@@ -101,14 +95,10 @@ namespace MealService.Services
         public async Task<IEnumerable<CheatMealDTO>> SearchForReport(long userId, string fromDate, string toDate)
         {
             if (String.IsNullOrEmpty(fromDate))
-            {
                 throw new InvalidDataException("From date is required");
-            }
 
             if (String.IsNullOrEmpty(toDate))
-            {
                 throw new InvalidDataException("To date is required");
-            }
 
             List<CheatMeal> cheatMealList = await _mealDbContext.CheatMeals
                 .Where(c => c.DateTimeTaken >= Convert.ToDateTime(fromDate))
@@ -119,9 +109,7 @@ namespace MealService.Services
                 .ToListAsync();
 
             if (cheatMealList == null || !cheatMealList.Any())
-            {
                 return Enumerable.Empty<CheatMealDTO>();
-            }
 
             return cheatMealList.Select(i => EntityToDTO(i)).ToList();
         }
@@ -136,9 +124,7 @@ namespace MealService.Services
                .Include(c => c.MealReason).FirstOrDefaultAsync();
 
             if (cheatMeal == null)
-            {
                 throw new InvalidDataException("Cheat meal id is invalid");
-            }
 
             return cheatMeal;
         }

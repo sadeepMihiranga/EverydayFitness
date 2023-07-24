@@ -21,14 +21,10 @@ namespace UserService.Services
         public async Task<UserDTO> Login(LoginRequestDTO loginRequestDTO)
         {
             if (loginRequestDTO.Username == null || loginRequestDTO.Username.Equals(""))
-            {
                 throw new InvalidDataException("Username is required");
-            }
 
             if (loginRequestDTO.Password == null || loginRequestDTO.Password.Equals(""))
-            {
                 throw new InvalidDataException("Password is required");
-            }
 
             loginRequestDTO.Password = GetSha256Hashed(loginRequestDTO.Password);
 
@@ -39,9 +35,7 @@ namespace UserService.Services
                 .FirstOrDefaultAsync();
 
             if (user == null)
-            {
                 throw new InvalidDataException("Invalid user credentials");
-            }
 
             return EntityToDTO(user);
         }
@@ -49,14 +43,10 @@ namespace UserService.Services
         public async Task<UserDTO> RegisterUser(UserDTO userDTO)
         {
             if (userDTO.Username == null || userDTO.Username.Equals(""))
-            {
                 throw new InvalidDataException("Username is required");
-            }
 
             if (userDTO.Password == null || userDTO.Password.Equals(""))
-            {
                 throw new InvalidDataException("Password is required");
-            }
 
             User user = await _userDbContext.Users
                .Where(u => u.Username.Equals(userDTO.Username))
@@ -64,9 +54,7 @@ namespace UserService.Services
                .FirstOrDefaultAsync();
 
             if (user != null)
-            {
                 throw new InvalidDataException("Username is already taken");
-            }
 
             User newUser = DTOToEntity(userDTO);
             newUser.Status = CommonStatusEnum.ACTIVE;
@@ -85,9 +73,7 @@ namespace UserService.Services
                 .FirstOrDefaultAsync();
 
             if (user == null) 
-            {
                 throw new InvalidDataException("User id is invalid");
-            }
 
             return EntityToDTO(user);
         }

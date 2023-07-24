@@ -1,6 +1,4 @@
-﻿using FitnessTracker.Enums;
-
-namespace WorkoutService.Model
+﻿namespace WorkoutService.Model
 {
     public class Workout : BaseModel
     {   
@@ -16,7 +14,6 @@ namespace WorkoutService.Model
         public string? RecurringType { get; set; }
         public string? RecurrsionDate { get; set; }
         public string? Comment { get; set; }
-        public CommonStatusEnum Status { get; set; }
         public int User { get; set; }
     }
 }
