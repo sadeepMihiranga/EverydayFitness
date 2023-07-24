@@ -53,9 +53,9 @@ namespace MealService.Controllers
 
         [Route("users/{userId}")]
         [HttpPost]
-        public async Task<IActionResult> LogCheatMeal(CheatMealDTO cheatMealDTO)
+        public async Task<IActionResult> LogCheatMeal(long userId, CheatMealDTO cheatMealDTO)
         {
-            return Ok(new Response<CheatMealDTO>(await _cheatMealService.LogCheatMeal(cheatMealDTO)));
+            return Ok(new Response<CheatMealDTO>(await _cheatMealService.LogCheatMeal(userId, cheatMealDTO)));
         }
     }
 }

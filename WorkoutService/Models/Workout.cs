@@ -3,8 +3,7 @@
 namespace WorkoutService.Model
 {
     public class Workout : BaseModel
-    {
-
+    {   
         public string Name { get; set; }
         public WorkoutType Type { get; set; }
         public DateTime Date { get; set; }

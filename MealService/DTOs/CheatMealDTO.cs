@@ -12,6 +12,6 @@ namespace MealService.DTOs
         public int CaloriesTaken { get; set; }
         public DateTime DateTimeTaken { get; set; }
         public string Comment { get; set; }
-        public int User { get; set; }
+        public UserDTO User { get; set; }
     }
 }

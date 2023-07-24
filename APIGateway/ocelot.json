@@ -62,6 +62,17 @@
         }
       ]
     },
+    {
+      "UpstreamPathTemplate": "/apigateway/v1/user",
+      "UpstreamHttpMethod": [ "GET", "PUT", "POST", "DELETE" ],
+      "DownstreamPathTemplate": "/api/user",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "everydayfitness-userservice.azurewebsites.net"
+        }
+      ]
+    },
     // meal service
     {
       "UpstreamPathTemplate": "/apigateway/v1/cheat-meal-type/{id}",

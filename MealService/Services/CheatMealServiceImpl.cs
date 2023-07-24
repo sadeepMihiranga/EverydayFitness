@@ -52,12 +52,12 @@ namespace MealService.Services
             return EntityToDTO(ValidateCheatMeal(userId, id).Result);
         }
 
-        public async Task<CheatMealDTO> LogCheatMeal(CheatMealDTO cheatMealDTO)
+        public async Task<CheatMealDTO> LogCheatMeal(long userId, CheatMealDTO cheatMealDTO)
         {
             CheatMealType cheatMealType = _cheatMealTypeService.ValidateCheatMealType(cheatMealDTO.MealType.Id).Result;
             CheatMealReason cheatMealReason = _cheatMealReasonService.ValidateCheatMealReason(cheatMealDTO.MealReason.Id).Result;
              
-            CheatMeal cheatMeal = DTOToEntity(cheatMealDTO);
+            CheatMeal cheatMeal = DTOToEntity(userId, cheatMealDTO);
             cheatMeal.MealType = cheatMealType;
             cheatMeal.MealReason = cheatMealReason;
             cheatMeal.Status = CommonStatusEnum.ACTIVE;
@@ -143,7 +143,7 @@ namespace MealService.Services
             return cheatMeal;
         }
 
-        private CheatMeal DTOToEntity(CheatMealDTO cheatMealDTO)
+        private CheatMeal DTOToEntity(long userId, CheatMealDTO cheatMealDTO)
         {
             return new CheatMeal()
             {
@@ -153,7 +153,7 @@ namespace MealService.Services
                 CheatMealSatisfcation = cheatMealDTO.CheatMealSatisfcation,
                 MealPortionSize = cheatMealDTO.MealPortionSize,
                 Comment = cheatMealDTO.Comment,
-                User = cheatMealDTO.User,
+                User = Convert.ToInt32(userId),
                 Status = cheatMealDTO.Status               
             };
         }
@@ -169,7 +169,7 @@ namespace MealService.Services
                 CheatMealSatisfcation = cheatMeal.CheatMealSatisfcation,
                 MealPortionSize = cheatMeal.MealPortionSize,
                 Comment = cheatMeal.Comment,
-                User = cheatMeal.User,
+                User = ValidateUser(cheatMeal.User).Result,
                 Status = cheatMeal.Status,
                 MealReason = _cheatMealReasonService.EntityToDTO(cheatMeal.MealReason),
                 MealType = _cheatMealTypeService.EntityToDTO(cheatMeal.MealType),               
